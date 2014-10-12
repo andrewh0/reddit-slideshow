@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <title>Top {{image_count}} Pictures on Reddit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link href="{{ url_for('static', filename='bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='custom.css') }}" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h2 id="page-title" class="text-center"></h2>
+      {% for pic in pics %}
+      <div class="jumbotron reddit-listing" id={{pic.id}}>
+        <h5 class="lead text-center image-title pic-counter">
+          <span class="placeholder"></span>
+          <a href="{{pic.permalink}}">
+            {{pic.title}}
+          </a>
+        </h5>
+        <img class="img-responsive center-block" src="{{pic.url}}"></img>
+      </div>
+      {% endfor %}
+
+      <!-- <p><strong>Instructions: </strong>Use the left and right arrows to navigate. Type "day", "week", "month", "year", or "all" in the url bar to specify the time span. Type "r/[subreddit name]" before the time span to specify the subreddit.<br> -->
+      <!-- <strong>Examples: </strong><a href="/r/gifs/month">/r/Gifs/month</a> (top pictures in /r/Gifs this month), <a href="/all/">/all/</a> (top all time pictures on Reddit), or <a href="/r/earthporn/week">/r/EarthPorn/week</a> (top pictures in /r/EarthPorn this week).</p> -->
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="container-fluid">
+        <div class="row btn-container">
+          <div type="button" class="col-xs-6 text-center btn-default" id="btn-prev">
+              <i class="fa fa-arrow-left fa-3x"></i>
+          </div>
+          <div type="button" class="col-xs-6 text-center btn-default" id="btn-next">
+              <i class="fa fa-arrow-right fa-3x"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    // init
+    var currImageNumber = 0;
+    $('.reddit-listing').hide();
+    $('#image-0').show();
+    {% if pics == [] %}
+    $('#page-title').html("Sorry, it looks like there aren't any pictures here.");
+    {% else %}
+    $('#page-title').html('Top {{image_count}} Pictures{% if subreddit_name %} in {{subreddit_name}}{% endif %} {{time_title}}');
+    {% endif %}
+    $('#image-'+String(currImageNumber)+' .pic-counter .placeholder').html((currImageNumber+1)+'.)');
+
+    // functions
+    function nextImage() {
+      $('#image-'+String(currImageNumber)).hide();
+      currImageNumber = currImageNumber + 1
+      if (currImageNumber == {{image_count}}) {
+        currImageNumber = 0;
+      };
+      $('#image-'+String(currImageNumber)).show();
+      $('#page-title').html('Top {{image_count}} Pictures{% if subreddit_name %} in {{subreddit_name}}{% endif %} {{time_title}}');
+      $('#image-'+String(currImageNumber)+' .pic-counter .placeholder').html((currImageNumber+1)+'.)');
+    };
+
+    function prevImage() {
+      $('#image-'+String(currImageNumber)).hide();
+      currImageNumber = currImageNumber - 1
+      if (currImageNumber == -1) {
+        currImageNumber = {{image_count - 1}};
+      };
+      $('#image-'+String(currImageNumber)).show();
+      $('#page-title').html('Top {{image_count}} Pictures{% if subreddit_name %} in {{subreddit_name}}{% endif %} {{time_title}}');
+      $('#image-'+String(currImageNumber)+' .pic-counter .placeholder').html((currImageNumber+1)+'.)');
+    };
+
+    // controls
+    // enlarge image on click for larger screens (i.e. not mobile)
+    $('.jumbotron img').click(function(){
+        if ($(window).width() >= 768) {
+          console.log('large window');
+          $('#image-'+String(currImageNumber)).toggleClass('enlarged');
+        }
+    });
+
+    // prevent default [spacebar] behavior
+    $(document).keydown(function(e) {
+      if (e.keyCode == 32) {
+        return false;
+      }
+    });
+
+    // keyboard/nav controls
+    $(document).keydown(function(e) {
+      // left, j 
+      if (e.keyCode == 37 || e.keyCode == 74) { prevImage(); };
+      // right, k, space
+      if (e.keyCode == 39 || e.keyCode == 75 || e.keyCode == 32) { nextImage(); };
+    });
+    $('#btn-prev').click(function() { prevImage(); });
+    $('#btn-next').click(function() { nextImage(); });
+    </script>
+  </body>
+</html>
