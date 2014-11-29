@@ -82,10 +82,8 @@
     // fix img sizing on Chrome/Firefox
     // need to explicitly define max-height (not use %)
     function fixHeight() {
-      if ($(window).width() >= 768) {
-        jumboHeight = ($(window).height())*.75;
-        $('.jumbotron img').css('max-height',jumboHeight);
-      }
+      jumboHeight = ($(window).height())*.75;
+      $('.jumbotron img').css('max-height',jumboHeight);
     }
 
     // controls
