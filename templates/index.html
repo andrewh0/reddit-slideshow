@@ -82,8 +82,10 @@
     // fix img sizing on Chrome/Firefox
     // need to explicitly define max-height (not use %)
     function fixHeight() {
-      jumboHeight = ($(window).height())*.75;
-      $('.jumbotron img').css('max-height',jumboHeight);
+      if ($(window).width() >= 768) { // fix height for desktop only
+        jumboHeight = ($(document).height())*.75;
+        $('.jumbotron img').css('max-height',jumboHeight);
+      }
     }
 
     // controls
@@ -111,8 +113,8 @@
     });
     $('#btn-prev').click(function() { prevImage(); });
     $('#btn-next').click(function() { nextImage(); });
-    $(document).ready(function(){fixHeight()});
-    $(window).resize(function(){fixHeight()});
+    $(document).ready(function(){console.log($(document).height());fixHeight()});
+    $(window).resize(function(){console.log($(document).height());fixHeight()});
     </script>
   </body>
 </html>
