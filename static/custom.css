@@ -97,6 +97,7 @@ body {
 	}
 	.jumbotron img {
 	max-height: none;
+	cursor: auto;
 	}
 
 	#page-title {

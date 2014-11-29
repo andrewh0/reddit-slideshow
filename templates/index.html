@@ -83,8 +83,7 @@
     // need to explicitly define max-height (not use %)
     function fixHeight() {
       if ($(window).width() >= 768) {
-        jumboHeight = ($(window).height())*.75;
-        $('.jumbotron img').css('max-height',jumboHeight);
+        $('.jumbotron img').css('max-height',($(window).height())*.75);
       }
     }
 
@@ -92,7 +91,6 @@
     // enlarge image on click for larger screens (i.e. not mobile)
     $('.jumbotron img').click(function(){
         if ($(window).width() >= 768) {
-          // console.log('large window');
           $('#image-'+String(currImageNumber)).toggleClass('enlarged');
         }
     });
@@ -113,8 +111,8 @@
     });
     $('#btn-prev').click(function() { prevImage(); });
     $('#btn-next').click(function() { nextImage(); });
-    $(document).ready(function(){fixHeight()});
-    $(window).resize(function(){fixHeight()});
+    $('.jumbotron img').load(function(){fixHeight()});
+    $(window).resize(function(){fixHeight();});
     </script>
   </body>
 </html>
