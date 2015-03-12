@@ -1,3 +1,6 @@
+import newrelic.agent
+newrelic.agent.initialize('newrelic.ini')
+
 from flask import *
 import re, urllib, urllib2, json, HTMLParser, sys
 
